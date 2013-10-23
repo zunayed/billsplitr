@@ -1,0 +1,59 @@
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+
+
+<div>
+	First name: <input type="text" name="firstname" id="firstname"><br>
+	<button id="save-btn">Save</button>	
+</div>
+
+<div>
+	QTY: <input type="number" name="qty" id="qty"><br>
+	item: <input type="description" name="description" id="description"><br>
+	price: <input type="number" name="price" id="price"><br>
+	<button id="add-item-btn">Save</button>	
+</div>
+
+<div id="stream">
+</div>
+
+<div id="userItem">
+</div>
+
+<div id="subtotal">
+</div>
+total
+<div id="total">
+</div>
+
+<script>
+  var socket = io.connect('http://localhost:3000');
+  var subtotal = 0
+
+  socket.on('joined', function (people) {
+  	$("#stream").html('');
+    for(var i = 0; i < people.length; i++){
+    	var person = people[i];
+    	  $("#stream").append("<li>" + person.name + " in the room</li>");
+    }
+  });
+
+  socket.on('addTotal', function (total) {
+  	$("#total").html(total);
+  })
+
+  $('#save-btn').on('click', function(){
+  	var firstname = $('#firstname').val();
+  	socket.emit('joined', { name: firstname, msg: "joined the room"});
+  });
+
+  $('#add-item-btn').on('click', function(){
+  	var qty = $('#qty').val();
+  	var price = $('#price').val();
+  	subtotal = qty * price
+  	$("#subtotal").html(subtotal);
+  	socket.emit('addTotal', subtotal);
+  });
+
+
+</script>
