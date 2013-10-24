@@ -2,6 +2,8 @@ var app = require('http').createServer(handler)
   , io = require('socket.io').listen(app)
   , fs = require('fs')
 
+var calculate = require('./calculate');
+
 app.listen(3000);
 
 function handler (req, res) {
@@ -28,12 +30,20 @@ io.sockets.on('connection', function (socket) {
     socket.broadcast.emit('addTotal', total);
   });
 
-  socket.on('addTotal', function (subtotal) {
-    console.log('total')
-    console.log(total)
-    total = total + subtotal
-    console.log(total)
-    socket.emit('addTotal', total);
-    socket.broadcast.emit('addTotal', total);
+  socket.on('addTotal', function (user_data) {
+
+    var items = user_data.items
+    var calculated_values = calculate.calculateSubtotal(items)
+
+    var subtotal = calculated_values.subtotal
+
+    console.log('subtotal', subtotal)
+
+    // console.log('total')
+    // console.log(total)
+    // total = total + subtotal
+    // console.log(total)
+    // socket.emit('addTotal', total);
+    // socket.broadcast.emit('addTotal', total);
   });
 });
