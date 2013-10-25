@@ -1,16 +1,22 @@
-<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-<script src="/socket.io/socket.io.js"></script>
-
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.1/jquery.mobile-1.2.1.min.css" />
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <script src="http://code.jquery.com/mobile/1.2.1/jquery.mobile-1.2.1.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
 
 <div>
-	First name: <input type="text" name="firstname" id="firstname"><br>
-	<button id="save-btn">Save</button>	
+	<input type="text" placeholder ='Name' name="firstname" id="firstname"><br>
+	<button class='btn btn-primary'id="save-btn">Save</button>	
 </div>
 
 <div>
-	QTY: <input type="number" name="qty" id="qty"><br>
-	item: <input type="description" name="description" id="description"><br>
-	price: <input type="number" name="price" id="price"><br>
+	<input type="number" placeholder='Quantity' name="qty" id="qty"><br>
+	<input type="description" placeholder='Item' name="description" id="description"><br>
+	<input type="number" placeholder='Price' name="price" id="price"><br>
 	<button id="add-item-btn">Save</button>	
 </div>
 
@@ -28,35 +34,34 @@ total
 
 <script>
   var socket = io.connect('http://localhost:3000');
-  var subtotal = 0
+  var subtotal = 0;
 
   socket.on('joined', function (people) {
-  	$("#stream").html('');
+    $("#stream").html('');
     for(var i = 0; i < people.length; i++){
-    	var person = people[i];
-    	  $("#stream").append("<li>" + person.name + " in the room</li>");
+      var person = people[i];
+      $("#stream").append("<li>" + person.name + " in the room</li>");
     }
   });
 
   socket.on('addTotal', function (total) {
-  	$("#total").html(total);
-  })
+    $("#total").html(total);
+  });
 
   $('#save-btn').on('click', function(){
-  	
-  	socket.emit('joined', collectData());
+    socket.emit('joined', collectData());
   });
 
   $('#add-item-btn').on('click', function(){
-  	var qty = $('#qty').val();
-  	var price = $('#price').val();
+    var qty = $('#qty').val();
+    var price = $('#price').val();
     var description = $('#description').val();
     var msg =  qty + " " + description + " each costing " + price;
     $("#userItems").append("<li data-price='" + price + "' data-qty='" + qty + "' data-description='" + description + "'>" + msg + "</li>");
 
-  	subtotal = qty * price
-  	//$("#subtotal").html(subtotal);
-  	socket.emit('addTotal', collectData());
+    subtotal = qty * price;
+    //$("#subtotal").html(subtotal);
+    socket.emit('addTotal', collectData());
   });
 
   var collectData = function(){
@@ -73,13 +78,10 @@ total
         qty: qty,
         price: price,
         description: description
-      })
+      });
     });
 
     return {name: firstname, items: items};
-
-
   };
-
-
 </script>
+</html>

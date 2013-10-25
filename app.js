@@ -1,6 +1,6 @@
-var app = require('http').createServer(handler)
-  , io = require('socket.io').listen(app)
-  , fs = require('fs')
+var app = require('http').createServer(handler),
+    io = require('socket.io').listen(app),
+    fs = require('fs');
 
 var calculate = require('./calculate');
 
@@ -19,7 +19,7 @@ function handler (req, res) {
 }
 
 var people = [];
-var total = 0
+var group_total = 0;
 
 io.sockets.on('connection', function (socket) {
   socket.on('joined', function (data) {
@@ -27,17 +27,16 @@ io.sockets.on('connection', function (socket) {
     console.log(people);
     socket.emit('joined', people);
     socket.broadcast.emit('joined', people);
-    socket.broadcast.emit('addTotal', total);
+    socket.broadcast.emit('addTotal', group_total);
   });
 
   socket.on('addTotal', function (user_data) {
 
-    var items = user_data.items
-    var calculated_values = calculate.calculateSubtotal(items)
+    var items = user_data.items;
+    var calculated_values = calculate.calculateSubtotal(items);
+    var subtotal = calculated_values.subtotal;
 
-    var subtotal = calculated_values.subtotal
-
-    console.log('subtotal', subtotal)
+    console.log('subtotal', subtotal);
 
     // console.log('total')
     // console.log(total)
