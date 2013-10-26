@@ -22,27 +22,23 @@ var people = [];
 var group_total = 0;
 
 io.sockets.on('connection', function (socket) {
+  socket.emit('joined', people);
+  socket.broadcast.emit('addTotal', group_total);
+  
   socket.on('joined', function (data) {
     people.push(data);
-    console.log(people);
     socket.emit('joined', people);
     socket.broadcast.emit('joined', people);
-    socket.broadcast.emit('addTotal', group_total);
+    
   });
 
   socket.on('addTotal', function (user_data) {
-
     var items = user_data.items;
     var calculated_values = calculate.calculateSubtotal(items);
     var subtotal = calculated_values.subtotal;
 
-    console.log('subtotal', subtotal);
-
-    // console.log('total')
-    // console.log(total)
-    // total = total + subtotal
-    // console.log(total)
-    // socket.emit('addTotal', total);
-    // socket.broadcast.emit('addTotal', total);
+    group_total += subtotal
+    socket.emit('addTotal', group_total);
+    socket.broadcast.emit('addTotal', group_total);
   });
 });

@@ -9,4 +9,11 @@ var calculateSubtotal = function(items){
 	return {itemCost: items_cost, subtotal: subtotal};
 };
 
+var calculateGroupTotal = function(group_total, user_data){
+    var items = user_data.items;
+    var calculated_values = calculate.calculateSubtotal(items);
+    var subtotal = calculated_values.subtotal;
+
+};
+
 exports.calculateSubtotal = calculateSubtotal;

@@ -59,7 +59,7 @@
 
         <div id="subtotal"></div>
 
-        <div id="total"></div>
+        <div id="groupTotal"></div>
       </div>
 
   <script>
@@ -74,8 +74,10 @@
     }
     });
 
-    socket.on('addTotal', function (total) {
-    $("#total").html(total);
+    socket.on('addTotal', function (groupTotal) {
+
+    $("#groupTotal").html('total is' + groupTotal);
+    
     });
 
     $('#save-btn').on('click', function(){
@@ -91,8 +93,6 @@
     var msg =  qty + " " + description + " each costing " + price;
     $("#userItems").append("<li class='list-group-item' data-price='" + price + "' data-qty='" + qty + "' data-description='" + description + "'>" + msg + "</li>");
 
-    subtotal = qty * price;
-    //$("#subtotal").html(subtotal);
     socket.emit('addTotal', collectData());
     });
 
@@ -112,7 +112,7 @@
         description: description
       });
     });
-
+    //returns user data 
     return {name: firstname, items: items};
     };
   </script>
