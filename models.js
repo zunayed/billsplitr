@@ -12,9 +12,20 @@ exports.Person = function( name ) {
   var public = {
     name : name,
     items : [],
+    hasItem : function ( description ){
+      for (var i = this.items.length - 1; i >= 0; i--) {
+        if (this.items[i].description == description){
+          return true;
+        }
+      }
+      return false; 
+
+    },
     addItem : function( item_data ) {
-      var item = new Item( item_data );
-      this.items.push( item );
+      if (!this.hasItem(item_data.description)){
+        var item = new Item( item_data );
+        this.items.push( item );
+      }
     }
   }
   return public;
