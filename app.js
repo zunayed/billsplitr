@@ -3,6 +3,7 @@ var app = require('http').createServer(handler),
     fs = require('fs');
 
 var calculate = require('./calculate');
+var models = require('./models');
 
 app.listen(3000);
 
@@ -17,39 +18,8 @@ function handler (req, res) {
     res.end(data);
   });
 }
-var Item = function( item_data ) {
-  var public = {
-    name : item_data.name,
-    price : item_data.price,
-    quantity : item_data.quantity
-  };
-  return public;
-};
-var Person = function( name ) {
-  var public = {
-    name : name,
-    items : [],
-    addItems : function( item_data ) {
-      var item = new Item( item_data );
-      this.items.push( item );
-    }
-  }
-  return public;
-};
 
-var App = function() {
-  var public = {
-    people : [],
-    group_total : 0,
-    addPerson : function( name ) {
-      var person = new Person( name );
-      this.people.push( person );
-    }
-  }
-  return public;
-};
-
-app = new App();
+app = new models.App();
 
 io.sockets.on('connection', function (socket) {
   socket.emit('joined', app.people );
