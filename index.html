@@ -1,70 +1,102 @@
+<!DOCTYPE html>
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.1/jquery.mobile-1.2.1.min.css" />
-    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <script src="http://code.jquery.com/mobile/1.2.1/jquery.mobile-1.2.1.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
   </head>
 
-<div>
-	<input type="text" placeholder ='Name' name="firstname" id="firstname"><br>
-	<button class='btn btn-primary'id="save-btn">Save</button>	
-</div>
+  <body>
 
-<div>
-	<input type="number" placeholder='Quantity' name="qty" id="qty"><br>
-	<input type="description" placeholder='Item' name="description" id="description"><br>
-	<input type="number" placeholder='Price' name="price" id="price"><br>
-	<button id="add-item-btn">Save</button>	
-</div>
+    <div class="navbar navbar-inverse navbar-static-top">
+      <div class="container">
+        <a href="#" class="navbar-brand">BillSplitr</a>
 
-<div id="stream">
-</div>
+        
+          <ul class="nav navbar-nav navbar-right">
+            <li class="active"><a href="#">Home</a></li>
+            <li class="dropdown">
+              <a href = "#" class="dropdown-toggle" data-toggle="dropdown">Menu</a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">item 1</a></li>
+                  <li><a href="#">item 2</a></li>
+                  <li><a href="#">item 3</a></li>
+                </ul>
+            </li>
+            <li><a href="#">About</li>
+          </ul>
+        
+      </div>
+    </div>
+  </body>
 
-<ul id="userItems">
-</ul>
 
-<div id="subtotal">
-</div>
-total
-<div id="total">
-</div>
+      <div class="col-lg-6">
+        <div class="input-group">
+          <input type="text" placeholder="name" name="firstname" id="firstname" class="form-control">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button" id="save-btn">Go!</button>
+          </span>
+        </div><!-- /input-group -->
+      </div><!-- /.col-lg-6 -->
 
-<script>
-  var socket = io.connect('http://localhost:3000');
-  var subtotal = 0;
+      <div>
+        <input type="number" class="form-control" placeholder='Quantity' name="qty" id="qty"><br>
+        <input type="description" class="form-control" placeholder='Item' name="description" id="description"><br>
+        <input type="number" class="form-control" placeholder='Price' name="price" id="price"><br>
+        <button class='btn btn-primary' id="add-item-btn">Save</button> 
 
-  socket.on('joined', function (people) {
+        <ul id="stream"></ul>
+
+        <ul id="userItems"></ul>
+
+        <div id="subtotal"></div>
+
+        <div id="total"></div>
+      </div>
+
+  <script>
+    var socket = io.connect('http://localhost:3000');
+    var subtotal = 0;
+
+    socket.on('joined', function (people) {
     $("#stream").html('');
     for(var i = 0; i < people.length; i++){
       var person = people[i];
-      $("#stream").append("<li>" + person.name + " in the room</li>");
+      $("#stream").append("<li class='list-group-item'>" + person.name + " in the room</li>");
     }
-  });
+    });
 
-  socket.on('addTotal', function (total) {
+    socket.on('addTotal', function (total) {
     $("#total").html(total);
-  });
+    });
 
-  $('#save-btn').on('click', function(){
+    $('#save-btn').on('click', function(){
     socket.emit('joined', collectData());
-  });
+    $('#firstname').hide();
+    $('#save-btn').hide();
+    });
 
-  $('#add-item-btn').on('click', function(){
+    $('#add-item-btn').on('click', function(){
     var qty = $('#qty').val();
     var price = $('#price').val();
     var description = $('#description').val();
     var msg =  qty + " " + description + " each costing " + price;
-    $("#userItems").append("<li data-price='" + price + "' data-qty='" + qty + "' data-description='" + description + "'>" + msg + "</li>");
+    $("#userItems").append("<li class='list-group-item' data-price='" + price + "' data-qty='" + qty + "' data-description='" + description + "'>" + msg + "</li>");
 
     subtotal = qty * price;
     //$("#subtotal").html(subtotal);
     socket.emit('addTotal', collectData());
-  });
+    });
 
-  var collectData = function(){
+    var collectData = function(){
     var firstname = $('#firstname').val();
     var qty = $('#qty').val();
     var price = $('#price').val();
@@ -82,6 +114,6 @@ total
     });
 
     return {name: firstname, items: items};
-  };
-</script>
+    };
+  </script>
 </html>
