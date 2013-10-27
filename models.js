@@ -10,8 +10,9 @@ exports.Item = function( item_data ) {
 };
 
 var Item = exports.Item;
-exports.Person = function( name ) {
+exports.Person = function( name, app ) {
   var public = {
+    app : app,
     name : name,
     items : [],
     subtotal : 0,
@@ -44,6 +45,7 @@ exports.Person = function( name ) {
     },
     updateSubtotal : function() {
       this.subtotal = calculate.calculateSubtotal( this.items );
+      this.app.refreshGroupTotal();
     }
   }
   return public;
@@ -56,7 +58,7 @@ exports.App = function() {
     group_total : 0,
     addPerson : function( name ) {
       if( !this.hasPerson( name ) ) {
-        var person = new Person( name );
+        var person = new Person( name, this );
         this.people.push( person );
       }
     },
