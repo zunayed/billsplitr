@@ -67,7 +67,7 @@ exports.App = function() {
         }
       }
       return false;
-    }
+    },
     refreshGroupTotal : function() {
       var group_total = 0;
       for( var i = this.people.length - 1; i >= 0; i-- ) {
