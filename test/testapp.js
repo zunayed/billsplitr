@@ -26,8 +26,8 @@ describe('Billsplitr test', function(){
   describe('#model test()', function(){
     //intial setup
     beforeEach(function(){
-      this.person = new models.Person("test_person");
       this.app = new models.App();
+      this.person = new models.Person("test_person", this.app);
     });
 
     it('should return an app class object, intialized data should be clean', function(){
@@ -114,6 +114,31 @@ describe('Billsplitr test', function(){
       assert.equal( 1, person.items.length );
       assert.equal( "burger", person.items[0].description );
       assert.equal( 15.225, person.subtotal );
+    } );
+
+    it( 'tests that an app is keeping track of the group total', function() {
+      var app = this.app;
+
+      var beer   = {"quantity":3,"price":5,"description":"beer"};
+      var burger = {"quantity":1,"price":12,"description":"burger"};
+
+      app.addPerson( "shak" );
+      assert.equal( 0, app.group_total );
+
+      app.addPerson( "zunayed" );
+      assert.equal( 0, app.group_total );
+
+      var shak    = app.people[0];
+      var zunayed = app.people[1];
+
+      shak.addItem( beer );
+      zunayed.addItem( burger );
+
+      assert.equal( 34.25625, app.group_total );
+      shak.addItem( burger );
+      assert.equal( 15.225 + 34.25625, app.group_total );
+      zunayed.removeItem( "burger" );
+      assert.equal( 34.25625, app.group_total );
     } );
 
     //remove item
