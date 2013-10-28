@@ -47,7 +47,7 @@ exports.Person = function( name, app ) {
       this.subtotal = calculate.calculateSubtotal( this.items );
       this.app.refreshGroupTotal();
     }
-  }
+  };
   return public;
 };
 
@@ -77,6 +77,6 @@ exports.App = function() {
       }
       this.group_total = group_total;
     }
-  }
+  };
   return public;
 };

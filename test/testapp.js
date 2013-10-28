@@ -20,6 +20,12 @@ describe('Billsplitr tests', function(){
       var result = calculate.calculateSubtotal(items);
       assert.equal(6.34375, result);
     });
+
+    it('should return the proper group total', function(){
+      var items = [{'quantity':1,'price':5,'description':'beer'}];
+      var result = calculate.calculateSubtotal(items);
+      assert.equal(6.34375, result);
+    });
   });
 
   describe('#model test()', function(){
