@@ -22,13 +22,14 @@ function handler (req, res) {
 app = new models.App();
 
 io.sockets.on('connection', function (socket) {
-  socket.emit('joined', app.people );
+  socket.emit('joined', app.people_list);
   socket.broadcast.emit('addTotal', app.group_total);
   
   socket.on('joined', function (data) {
     app.addPerson(data.name)
-    socket.emit('joined', app.people );
-    socket.broadcast.emit('joined', app.people);
+
+    socket.emit('joined', app.people_list);
+    socket.broadcast.emit('joined', app.people_list);
   });
 
   // socket.on('addTotal', function (user_data) {

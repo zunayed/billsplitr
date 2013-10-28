@@ -68,7 +68,7 @@
     $("#stream").html('');
     for(var i = 0; i < people.length; i++){
       var person = people[i];
-      $("#stream").append("<li class='list-group-item'>" + person.name + " in the room</li>");
+      $("#stream").append("<li class='list-group-item'>" + person + " in the room</li>");
     }
     });
 
@@ -111,6 +111,7 @@
       });
     });
     //returns user data 
+    console.log({name: firstname, items: items})
     return {name: firstname, items: items};
     };
   </script>
