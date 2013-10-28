@@ -56,10 +56,12 @@ exports.App = function() {
   var public = {
     people : [],
     group_total : 0,
+    people_list : [],
     addPerson : function( name ) {
       if( !this.hasPerson( name ) ) {
         var person = new Person( name, this );
         this.people.push( person );
+        this.people_list.push (person.name);
       }
     },
     hasPerson : function( name ){
@@ -76,7 +78,7 @@ exports.App = function() {
         group_total += this.people[i].subtotal;
       }
       this.group_total = group_total;
-    }
+    },
   };
   return public;
 };
