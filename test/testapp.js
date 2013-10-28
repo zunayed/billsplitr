@@ -3,31 +3,6 @@ var calculate = require('../calculate');
 var models = require('../models');
 
 describe('Billsplitr tests', function(){
-  describe('#calculateSubtotal()', function(){
-    it('should return real subtotal for two items', function(){
-      var items = [{'quantity':3,'price':5,'description':'beer'},{'quantity':1,'price':12,'description':'burger'}];
-      var result = calculate.calculateSubtotal(items);
-      assert.equal(34.25625, result);
-    });
-
-    it('should return 0 as itemCost and subtotal when items is empty array', function(){
-      var result = calculate.calculateSubtotal([]);
-      assert.equal(0, result);
-    });
-
-    it('should return proper subtotal for one item', function(){
-      var items = [{'quantity':1,'price':5,'description':'beer'}];
-      var result = calculate.calculateSubtotal(items);
-      assert.equal(6.34375, result);
-    });
-
-    it('should return the proper group total', function(){
-      var items = [{'quantity':1,'price':5,'description':'beer'}];
-      var result = calculate.calculateSubtotal(items);
-      assert.equal(6.34375, result);
-    });
-  });
-
   describe('#model test()', function(){
     //intial setup
     beforeEach(function(){
@@ -55,6 +30,10 @@ describe('Billsplitr tests', function(){
       app.addPerson( 'test_person' );
       assert.equal( 1, app.people.length );
       assert.equal( 'test_person', app.people[0].name );
+      app.addPerson( 'zunayed' );
+      test_list = ['test_person','zunayed'];
+      people_list = app.people_list;
+      assert.deepEqual(test_list, people_list);
     } );
 
     it( 'tests calculating the subtotal', function() {
@@ -82,7 +61,6 @@ describe('Billsplitr tests', function(){
       assert.equal( 1, app.people.length );
     });
 
-    //add items
     //'quantity':3,'price':5,'description':'beer'
     it('add an item to a person and see if params match', function(){
       var person = this.person;
@@ -147,7 +125,5 @@ describe('Billsplitr tests', function(){
       zunayed.removeItem( "burger" );
       assert.equal( 34.25625, app.group_total );
     } );
-
-    //remove item
   });
 });
