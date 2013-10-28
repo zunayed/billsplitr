@@ -11,6 +11,7 @@
 
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
+    <script src="/frontend.js"></script>
   </head>
 
   <body>
@@ -79,19 +80,19 @@
     });
 
     $('#save-btn').on('click', function(){
-    socket.emit('joined', collectData());
-    $('#firstname').hide();
-    $('#save-btn').hide();
+      socket.emit('joined', collectData());
+      $('#firstname').hide();
+      $('#save-btn').hide();
     });
 
     $('#add-item-btn').on('click', function(){
-    var qty = $('#qty').val();
-    var price = $('#price').val();
-    var description = $('#description').val();
-    var msg =  qty + " " + description + " each costing " + price;
-    $("#userItems").append("<li class='list-group-item' data-price='" + price + "' data-qty='" + qty + "' data-description='" + description + "'>" + msg + "</li>");
+      var qty = $('#qty').val();
+      var price = $('#price').val();
+      var description = $('#description').val();
+      var msg =  qty + " " + description + " each costing " + price;
+      $("#userItems").append("<li class='list-group-item' data-price='" + price + "' data-qty='" + qty + "' data-description='" + description + "'>" + msg + "</li>");
 
-    socket.emit('addTotal', collectData());
+      socket.emit('addTotal', collectData());
     });
 
     var collectData = function(){
