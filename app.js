@@ -24,6 +24,7 @@ app = new models.App();
 io.sockets.on('connection', function (socket) {
   socket.emit('joined', app.people_list);
   socket.broadcast.emit('addTotal', app.group_total);
+  //****** add pushing of group total *********
   
   socket.on('joined', function (data) {
     app.addPerson(data.name)
@@ -32,13 +33,22 @@ io.sockets.on('connection', function (socket) {
     socket.broadcast.emit('joined', app.people_list);
   });
 
-  // socket.on('addTotal', function (user_data) {
-  //   var items = user_data.items;
-  //   var calculated_values = calculate.calculateSubtotal(items);
-  //   var subtotal = calculated_values.subtotal;
+  socket.on('addItem', function (data) {
 
-  //   group_total += subtotal
-  //   socket.emit('addTotal', group_total);
-  //   socket.broadcast.emit('addTotal', group_total);
-  // });
+    //****** add a new item to user *********
+    
+
+
+
+
+
+
+    // var items = user_data.items;
+    // var calculated_values = calculate.calculateSubtotal(items);
+    // var subtotal = calculated_values.subtotal;
+
+    // group_total += subtotal
+    // socket.emit('addTotal', group_total);
+    // socket.broadcast.emit('addTotal', group_total);
+  });
 });
