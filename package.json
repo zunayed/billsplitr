@@ -1,0 +1,11 @@
+{
+    "name": "BillSplitr",
+    "version": "0.0.1",
+    "description": "Real time check managment",
+    "dependencies": {
+        "socket.io": "latest",
+        "express": "latest",
+        "jade": "latest"
+    },
+    "author": "Zunayed Ali"
+}

@@ -1,0 +1,24 @@
+doctype 5
+html
+   head
+      title Chat
+      script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js')
+      script(src="/socket.io/socket.io.js")
+      script(src="frontend.js")
+   body
+      div.container
+         header
+            h1 Billsplitr
+         div#groupTotal
+         input(type='text')#usernameInput
+         button#usernameSet Set Username  
+         ul#userList
+         div#itemControl
+            input(type='number' placeholder='quantity')#quantity
+            input(type='text' placeholder='of items')#description
+            input(type='number' placeholder='at price')#price
+            button#addItem Add Item
+         ul#itemList
+         
+
+
