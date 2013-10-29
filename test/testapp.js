@@ -18,11 +18,11 @@ describe('Billsplitr tests', function(){
 
     });
 
-    it('intialized person should retun person object and item data matching pass params', function(){
+    it('intialized person should return person object and item data matching pass params', function(){
       var person = this.person;
-      assert.equal(0, this.person.items);
-      assert.equal(0, this.person.subtotal);
-      assert.equal('test_person', this.person.name);
+      assert.equal(0, person.items);
+      assert.equal(0, person.subtotal);
+      assert.equal('test_person', person.name);
     });
 
     it( 'tests adding a person to the app', function() {
@@ -31,7 +31,7 @@ describe('Billsplitr tests', function(){
       assert.equal( 1, app.people.length );
       assert.equal( 'test_person', app.people[0].name );
       app.addPerson( 'zunayed' );
-      test_list = ['test_person','zunayed'];
+      test_list = ['zunayed','test_person'];
       people_list = app.people_list;
       assert.deepEqual(test_list, people_list);
     } );
@@ -124,6 +124,22 @@ describe('Billsplitr tests', function(){
       assert.equal( 15.225 + 34.25625, app.group_total );
       zunayed.removeItem( "burger" );
       assert.equal( 34.25625, app.group_total );
+    } );
+
+    it( 'should find a user', function() {
+      var app = this.app;
+      app.addPerson( 'shak' );
+      app.addPerson( 'zunayed' );
+      assert.equal( 'shak', app.people[app.getPerson('shak')].name );
+      assert.equal( 'zunayed', app.people[app.getPerson('zunayed')].name );
+    } );
+
+    it( 'remove a user', function() {
+      var app = this.app;
+      app.addPerson( 'shak' );
+      app.addPerson( 'zunayed' );
+      app.removePerson( 'zunayed' );
+      assert.equal( 'shak', app.people_list );
     } );
   });
 });

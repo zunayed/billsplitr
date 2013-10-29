@@ -1,11 +1,14 @@
 var calculate = require('./calculate');
 
 exports.Item = function( item_data ) {
+
+
   var public = {
     description : item_data.description,
     price : item_data.price,
     quantity : item_data.quantity
   };
+
   return public;
 };
 
@@ -61,7 +64,9 @@ exports.App = function() {
       if( !this.hasPerson( name ) ) {
         var person = new Person( name, this );
         this.people.push( person );
-        this.people_list.push (person.name);
+        //do diff
+        this.refreshPeopleList()
+        // this.people_list.push (person.name);
       }
     },
     hasPerson : function( name ){
@@ -71,6 +76,28 @@ exports.App = function() {
         }
       }
       return false;
+    },
+    getPerson : function( name ){
+      for (var i = this.people.length - 1; i >= 0; i--) {
+        if (this.people[i].name == name){
+          return i;
+        }
+      }
+      return false;
+    },
+    removePerson : function( name ){
+      if( this.hasPerson( name ) ) {  
+        this.people.splice( this.getPerson( name ), 1 );
+        this.refreshPeopleList()
+      }
+     
+    },
+    refreshPeopleList : function(){
+      this.people_list = [];
+      for (var i = this.people.length - 1; i >= 0; i--) {
+        this.people_list.push ( this.people[i].name );
+      }
+     
     },
     refreshGroupTotal : function() {
       var group_total = 0;
