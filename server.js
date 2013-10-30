@@ -32,18 +32,21 @@ io.sockets.on('connection', function ( socket ) {
 	socket.broadcast.emit( 'groupTotal', Math.round( billsplitr.group_total ) );
  
 	// set username
-	socket.on('addNewUser', function ( name ) {
-		billsplitr.addPerson( name );
-		socket.emit( 'peopleInRoom', billsplitr.people_list );
-		socket.broadcast.emit( 'peopleInRoom', billsplitr.people_list );
-	});
+	// socket.on('addNewUser', function ( name ) {
+	// 	billsplitr.addPerson( name );
+	// 	socket.emit( 'peopleInRoom', billsplitr.people_list );
+	// 	socket.broadcast.emit( 'peopleInRoom', billsplitr.people_list );
+	// });
 
 	//add a new item
-	socket.on('addItem', function ( data ) {
+	socket.on('addInfo', function ( data ) {
+		billsplitr.addPerson( data.name );
 		person_index = billsplitr.getPerson(data.name)
 		for (var i = data.items.length - 1; i >= 0; i--) {
 				billsplitr.people[person_index].addItem( data.items[i] );
 		};
+		socket.emit( 'peopleInRoom', billsplitr.people_list );
+		socket.broadcast.emit( 'peopleInRoom', billsplitr.people_list );
 		socket.emit( 'groupTotal', Math.round( billsplitr.group_total ) );
 		socket.broadcast.emit( 'groupTotal', Math.round( billsplitr.group_total ) );
 
