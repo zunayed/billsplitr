@@ -1,58 +1,33 @@
-var express = require( 'express' ), app = express(), 
-	http = require( 'http' ), 
-	server = http.createServer( app ), 
-	io = require( 'socket.io' ).listen( server ), 
-	jade = require( 'jade' );
+//Module dependencies.
 
-var calculate = require( './calculate' );
-var models = require( './models' );
- 
-server.listen( 3000 );
- 
-app.set( 'views', __dirname + '/views' );
-app.set( 'view engine', 'jade' );
-app.set( "view options", { layout: false } );
-app.configure( function() {
-	app.use(express.static( __dirname + '/public' ));
-	app.use(express.static( __dirname + '/public/css' ));
+var express = require('express');
+var http = require('http'); 
+var jade = require('jade');
+var path = require('path');
 
+var routes = require('./routes');
+var app = express();
+
+// all environments
+
+app.set('port', process.env.PORT || 3000);
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
+app.use(express.favicon());
+app.use(express.logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded());
+app.use(express.methodOverride());
+app.use(app.router);
+app.use(express.static(path.join(__dirname, 'public')));
+
+
+app.get('/', routes.index);
+
+var server = http.createServer(app).listen(app.get('port'), function(){
+  console.log('Express server listening on port ' + app.get('port'));
 });
 
-app.configure('development', function(){
-  app.use(express.errorHandler());
-    app.locals.pretty = true;
-});
+//throws server to socket io
+require('./routes/sockets.js').initialize(server);
 
-app.get('/', function( req, res ){
-  res.render( 'home.jade' );
-});
-
-
-bs = new models.App();
-
-io.sockets.on('connection', function ( socket ) {
-
-	function emit( channel , data )  {
-		socket.emit( channel, data );
-		socket.broadcast.emit( channel, data );
-	}
-
-	//broadcast all people in room
-	emit( 'peopleInRoom', bs.people_list );
-	//Group total
-	emit( 'groupTotal', Math.round( bs.group_total ) );	
-
-	//add a new item
-	socket.on('addInfo', function ( data ) {
-		bs.addPerson( data.name );
-		person_index = bs.getPerson(data.name)
-		if (data.items.length > 0) {
-			for (var i = data.items.length - 1; i >= 0; i--) {
-				bs.people[person_index].addItem( data.items[i] );
-			};
-		}
-		emit( 'peopleInRoom', bs.people_list );
-		emit( 'groupTotal', Math.round( bs.group_total ) );
-
-	});
-});

@@ -1,0 +1,33 @@
+extends header
+
+block body
+   div.grid-container
+      div.grid-20
+         h3
+            p In Room
+            div#userList
+      div.grid-50
+         div.controls
+            br
+            input(type='text' id='inputForm' class='nameForm' placeholder='Enter Your Name')#usernameInput
+            br
+            button(class='button')#usernameSet Submit  
+         
+         div#itemControl
+            input(type='number' placeholder='quantity' class='nameForm')#quantity 
+            br
+            input(type='text' placeholder='of items' class='nameForm')#description
+            br
+            input(type='number' placeholder='at price' class='nameForm')#price
+            br
+            button(class='button')#addItem Add Item
+         ul#itemList
+
+
+       div.grid-20
+         div#subTotal 
+         p Have a few people connect to this room and add their food items. You will see the updated totals in realtime in the top right corner
+
+
+    
+
