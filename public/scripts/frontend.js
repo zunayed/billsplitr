@@ -49,7 +49,7 @@ socket.on('peopleInRoom', function(people) {
 
 socket.on('groupTotal', function(data) {
    $("#groupTotal").html("")
-   $("#groupTotal").append("<li>Group Total $" + data + "</li>")
+   $("#groupTotal").append("<h3>Group Total $" + data + "</h3>")
 })
 
 socket.on('updateItemList', function(data) {
