@@ -1,26 +1,27 @@
-doctype 5
-html
-   head
-      title Chat
-      script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js')
-      script(src="/socket.io/socket.io.js")
-      script(src="frontend.js")
-   body
-      div.container
-         header
-            h1 Billsplitr
-         div#groupTotal
-         input(type='text')#usernameInput
-         button#usernameSet Set Username  
-         div#itemControl
-            input(type='number' placeholder='quantity')#quantity
-            input(type='text' placeholder='of items')#description
-            input(type='number' placeholder='at price')#price
-            button#addItem Add Item
-         ul#userList
-         ul#itemList
-            li No people or items yet!
-         
-         
+extends header
 
+block body
+   div.container
+      div.grid-80
+         div.grid-25
+            ul#userList
+         div.grid-75
+            br
+            div.controls
+               input(type='text' id='inputForm' class='nameForm' placeholder='Enter Your Name')#usernameInput
+               br
+               button(class='button')#usernameSet Submit  
+            
+            div#itemControl
+               input(type='number' placeholder='quantity' class='nameForm')#quantity 
+               br
+               input(type='text' placeholder='of items' class='nameForm')#description
+               br
+               input(type='number' placeholder='at price' class='nameForm')#price
+               br
+               button(class='button')#addItem Add Item
+            ul#itemList
+
+
+    
 
