@@ -1,21 +1,34 @@
 var socket = io.connect();
-var username = '';
 var items = [];
 
+var urlData = function () {
+   // function is anonymous, is executed immediately and returns value 
+   var query_string = {};
+   var query = window.location.search
+   query = query.split("?");
+ 
+   for (var i = 0; i < query.length; i++) {
+
+      var pair = query[i].split("=");
+      query_string[pair[0]] = pair[1];
+       
+   }  
+   return query_string;
+} ();
+
+var username = urlData.name;
+var room = urlData.room;
+
 $(function() {
-   $('#itemControl').hide();
-   $("#usernameSet").click( function() { addUser() } );
+
+   addUser();
    $("#addItem").click( function() { collectData() } );
 
 });
 
 function addUser() {
-   username = $("#usernameInput").val();
    if ( username != "" ) {
-      socket.emit('addInfo', { name: username, items: [] })
-      $('#usernameInput').hide();
-      $('#usernameSet').hide();
-      $('#itemControl').show();
+      socket.emit('joinRoom', { name: username, room: room })
    }
 }
 
@@ -60,8 +73,14 @@ socket.on('updateItemList', function(data) {
       var msg =  items[i].quantity + " " + items[i].description + " each costing " + items[i].price;
       $("#itemList").append("<li class='list-group-item' data-price='" + items[i].price + "' data-quantity='" + items[i].quantity + "' data-description='" + items[i].description + "'>" + msg + "</li>");
    };
+})
 
+socket.on('updateChat', function(server_data) {
 
+   $('#messageList').append("<p>" + server_data.message + "</p>")
 
 })
+
+
+
 
