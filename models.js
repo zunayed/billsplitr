@@ -129,6 +129,15 @@ exports.App = function() {
       }
       return false;
     },
+    getRoom : function ( name ){
+      for (var i = this.rooms.length - 1; i >= 0; i--) {
+        if (this.rooms[i].name == name){
+          return i;
+        }
+      }
+      return false;
+
+    },
     refreshRoomList : function(){
       this.room_list = [];
       for (var i = this.rooms.length - 1; i >= 0; i--) {
