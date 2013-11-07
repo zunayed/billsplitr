@@ -6,15 +6,31 @@ describe('Billsplitr tests', function(){
   describe('#model test()', function(){
     //intial setup
     beforeEach(function(){
-
-      this.person = new models.Person('test_person');
       this.app = new models.App();
-      this.person = new models.Person("test_person", this.app);
+      this.person = new models.Person('test_person');
+      this.room = new models.Room('test_room');
+      this.person = new models.Person("test_person", this.room);
     });
 
-    it('should return an app class object, intialized data should be clean', function(){
-      assert.equal(0, this.app.people.length);
-      assert.equal(0, this.app.group_total);
+    it('should create a new room and assign an app to it', function() {
+      assert.equal(0, this.app.rooms.length);
+      this.app.addRoom('test_room')
+      assert.equal(1, this.app.rooms.length);
+      assert.equal('test_room', this.app.rooms[0].name);
+    });
+
+    it('should check duplicate room is not added', function() {
+      this.app.addRoom('test_room')
+      assert.equal(1, this.app.rooms.length);
+      this.app.addRoom('test_room')
+      assert.equal(1, this.app.rooms.length);
+    });
+
+
+    it('should return an room class object, intialized data should be clean', function(){
+      assert.equal(0, this.room.people.length);
+      assert.equal(0, this.room.group_total);
+      assert.equal('test_room', this.room.name);
 
     });
 
@@ -25,16 +41,16 @@ describe('Billsplitr tests', function(){
       assert.equal('test_person', person.name);
     });
 
-    it( 'tests adding a person to the app', function() {
-      var app = this.app;
-      app.addPerson( 'test_person' );
-      assert.equal( 1, app.people.length );
-      assert.equal( 'test_person', app.people[0].name );
-      app.addPerson( 'zunayed' );
+    it( 'tests adding a person to the room', function() {
+      var room = this.room;
+      room.addPerson( 'test_person' );
+      assert.equal( 1, room.people.length );
+      assert.equal( 'test_person', room.people[0].name );
+      room.addPerson( 'zunayed' );
       test_list = ['zunayed','test_person'];
-      people_list = app.people_list;
+      people_list = room.people_list;
       assert.deepEqual(test_list, people_list);
-    } );
+    });
 
     it( 'tests calculating the subtotal', function() {
       var items = [{'quantity':3,'price':5,'description':'beer'},{'quantity':1,'price':12,'description':'burger'}];
@@ -54,11 +70,11 @@ describe('Billsplitr tests', function(){
       assert.equal('beer', beer.description);
     });
 
-    it( 'checks that a duplicate person cannot be added to an app', function() {
-      var app = this.app;
-      app.addPerson( 'test_person' );
-      app.addPerson( 'test_person' );
-      assert.equal( 1, app.people.length );
+    it( 'checks that a duplicate person cannot be added to an room', function() {
+      var room = this.room;
+      room.addPerson( 'test_person' );
+      room.addPerson( 'test_person' );
+      assert.equal( 1, room.people.length );
     });
 
     //'quantity':3,'price':5,'description':'beer'
@@ -101,45 +117,45 @@ describe('Billsplitr tests', function(){
       assert.equal( 15.225, person.subtotal );
     } );
 
-    it( 'tests that an app is keeping track of the group total', function() {
-      var app = this.app;
+    it( 'tests that an room is keeping track of the group total', function() {
+      var room = this.room;
 
       var beer   = {"quantity":3,"price":5,"description":"beer"};
       var burger = {"quantity":1,"price":12,"description":"burger"};
 
-      app.addPerson( "shak" );
-      assert.equal( 0, app.group_total );
+      room.addPerson( "shak" );
+      assert.equal( 0, room.group_total );
 
-      app.addPerson( "zunayed" );
-      assert.equal( 0, app.group_total );
+      room.addPerson( "zunayed" );
+      assert.equal( 0, room.group_total );
 
-      var shak    = app.people[0];
-      var zunayed = app.people[1];
+      var shak    = room.people[0];
+      var zunayed = room.people[1];
 
       shak.addItem( beer );
       zunayed.addItem( burger );
 
-      assert.equal( 34.25625, app.group_total );
+      assert.equal( 34.25625, room.group_total );
       shak.addItem( burger );
-      assert.equal( 15.225 + 34.25625, app.group_total );
+      assert.equal( 15.225 + 34.25625, room.group_total );
       zunayed.removeItem( "burger" );
-      assert.equal( 34.25625, app.group_total );
+      assert.equal( 34.25625, room.group_total );
     } );
 
     it( 'should find a user', function() {
-      var app = this.app;
-      app.addPerson( 'shak' );
-      app.addPerson( 'zunayed' );
-      assert.equal( 'shak', app.people[app.getPerson('shak')].name );
-      assert.equal( 'zunayed', app.people[app.getPerson('zunayed')].name );
+      var room = this.room;
+      room.addPerson( 'shak' );
+      room.addPerson( 'zunayed' );
+      assert.equal( 'shak', room.people[room.getPerson('shak')].name );
+      assert.equal( 'zunayed', room.people[room.getPerson('zunayed')].name );
     } );
 
     it( 'remove a user', function() {
-      var app = this.app;
-      app.addPerson( 'shak' );
-      app.addPerson( 'zunayed' );
-      app.removePerson( 'zunayed' );
-      assert.equal( 'shak', app.people_list );
+      var room = this.room;
+      room.addPerson( 'shak' );
+      room.addPerson( 'zunayed' );
+      room.removePerson( 'zunayed' );
+      assert.equal( 'shak', room.people_list );
     } );
   });
 });
