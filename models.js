@@ -1,8 +1,6 @@
 var calculate = require('./calculate');
 
 exports.Item = function( item_data ) {
-
-
   var public = {
     description : item_data.description,
     price : item_data.price,
@@ -13,9 +11,9 @@ exports.Item = function( item_data ) {
 };
 
 var Item = exports.Item;
-exports.Person = function( name, app ) {
+exports.Person = function( name, room ) {
   var public = {
-    app : app,
+    room : room,
     name : name,
     items : [],
     subtotal : 0,
@@ -48,15 +46,16 @@ exports.Person = function( name, app ) {
     },
     updateSubtotal : function() {
       this.subtotal = calculate.calculateSubtotal( this.items );
-      this.app.refreshGroupTotal();
+      this.room.refreshGroupTotal();
     }
   };
   return public;
 };
 
 var Person = exports.Person;
-exports.App = function() {
+exports.Room = function( name ) {
   var public = {
+    name : name,
     people : [],
     group_total : 0,
     people_list : [],
@@ -65,7 +64,7 @@ exports.App = function() {
         var person = new Person( name, this );
         this.people.push( person );
         //do diff
-        this.refreshPeopleList()
+        this.refreshPeopleList();
         // this.people_list.push (person.name);
       }
     },
@@ -108,4 +107,34 @@ exports.App = function() {
     },
   };
   return public;
+};
+
+var Room = exports.Room;
+exports.App = function() {
+  var public = {
+    rooms : [],
+    room_list : [],
+    addRoom : function( name ){
+      if( !this.hasRoom ( name )){
+        var room = new Room( name );
+        this.rooms.push( room ); 
+        this.refreshRoomList(); 
+      }
+    },
+    hasRoom : function ( name ){
+      for (var i = this.rooms.length - 1; i >= 0; i--) {
+        if (this.rooms[i].name == name){
+          return true;
+        }
+      }
+      return false;
+    },
+    refreshRoomList : function(){
+      this.room_list = [];
+      for (var i = this.rooms.length - 1; i >= 0; i--) {
+        this.room_list.push ( this.rooms[i].name );
+      }
+    },
+  };
+  return public
 };
