@@ -48,7 +48,7 @@ function collectData() {
       });
      
       //returns user data 
-      socket.emit('addInfo', {name: username, items: items})
+      socket.emit('addInfo', {name: username, room: room, items: items})
    }
 }
 
@@ -77,7 +77,7 @@ socket.on('updateItemList', function(data) {
 
 socket.on('updateChat', function(server_data) {
 
-   $('#messageList').append("<p>" + server_data.message + "</p>")
+   $('#messageList').append("<li>" + server_data.message + "</li>")
 
 })
 

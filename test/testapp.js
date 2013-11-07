@@ -16,7 +16,8 @@ describe('Billsplitr tests', function(){
       assert.equal(0, this.app.rooms.length);
       this.app.addRoom('test_room')
       assert.equal(1, this.app.rooms.length);
-      assert.equal('test_room', this.app.rooms[0].name);
+      this.app.addRoom('test_room2')
+      assert.equal('test_room2', this.app.rooms[1].name);
     });
 
     it('should check duplicate room is not added', function() {
@@ -140,6 +141,31 @@ describe('Billsplitr tests', function(){
       assert.equal( 15.225 + 34.25625, room.group_total );
       zunayed.removeItem( "burger" );
       assert.equal( 34.25625, room.group_total );
+    } );
+
+    it( 'test rooms have different totals', function() {
+      var app = this.app;
+      var beer   = {"quantity":3,"price":15,"description":"beer"};
+      var burger = {"quantity":2,"price":12,"description":"burger"};
+
+      app.addRoom('test_room1');
+      app.addRoom('test_room2');
+
+      assert.equal('test_room1', this.app.rooms[0].name);
+      assert.equal('test_room2', this.app.rooms[1].name);
+
+      app.rooms[0].addPerson('shak')
+      app.rooms[1].addPerson('mark')
+
+      var shak = app.rooms[0].people[0];
+      var mark = app.rooms[1].people[0];
+
+      shak.addItem( beer )
+      mark.addItem( burger )
+
+      assert.equal( 57.09375, app.rooms[0].group_total)
+      assert.equal( 30.45, app.rooms[1].group_total)
+
     } );
 
     it( 'should find a user', function() {
