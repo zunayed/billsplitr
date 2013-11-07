@@ -4,57 +4,54 @@ var models = require( '../models' );
 
 bs = new models.App();
 
-rooms = []
-
 exports.initialize = function (server) {
 	io = io.listen(server);
 
 	io.sockets.on('connection', function ( socket ) {
 
-		function emit( channel , data )  {
-			socket.emit( channel, data );
-			socket.broadcast.emit( channel, data );
-		}
-
-
-		//add a new item & person
-		// socket.on('addInfo', function ( data ) {
-
-		// 	bs.addPerson( data.name );
-		// 	person_index = bs.getPerson( data.name )
-		// 	if ( data.items.length > 0 ) {
-		// 		for ( var i = data.items.length - 1; i >= 0; i-- ) {
-		// 			bs.people[ person_index ].addItem( data.items[i] );
-		// 		};
-		// 	}
-
-		// 	socket.emit( 'updateItemList', {
-		// 		name: bs.people[person_index].name,
-		// 		items: bs.people[person_index].items, 
-		// 		subTotal: Math.round( bs.people[person_index].subtotal )
-		// 	});
-		// 	emit( 'peopleInRoom', bs.people_list );
-		// 	emit( 'groupTotal', Math.round( bs.group_total ) );
-
-		// }); 
-
 		//room setup
 		socket.on('joinRoom', function ( data ) {
-
-			room_list = Object.keys(io.sockets.manager.rooms))
-
-			socket.username = data.name
             socket.join( data.room );
    
+
+            bs.addRoom( data.room )
+            var rm_index = bs.getRoom( data.room )
+
+            bs.rooms[rm_index].addPerson( data.name ) 
+
+            //broadcast to people in the room names of people and message
+
             socket.emit( 'updateChat', { message: "You have joined " + data.room } );
-            socket.broadcast.to( data.room ).emit('updateChat', 
-            	{ message: data.name + " joined room " + data.room });
+			socket.broadcast.to( bs.rooms[rm_index].name ).emit('updateChat', 
+				{ message: data.name + " joined room " + data.room });
 
-            bs.addPerson( data.name );
+			socket.emit( 'peopleInRoom', bs.rooms[rm_index].people_list);
+			console.log(bs.rooms[rm_index].name)
+			socket.broadcast.to ( bs.rooms[rm_index].name ).emit( 'peopleInRoom', bs.rooms[rm_index].people_list );
 
-            //broadcast all people in room
-			socket.emit( 'peopleInRoom', bs.people_list);
-			socket.broadcast.to ( data.room ).emit( 'peopleInRoom', bs.people_list );
+			socket.emit('groupTotal', Math.round( bs.rooms[rm_index].group_total ))
+
+		});
+
+		//item add
+		socket.on('addInfo', function ( data ) {
+
+			var rm_index = bs.getRoom( data.room );
+			var person_index = bs.rooms[rm_index].getPerson( data.name );
+
+			if ( data.items.length > 0 ){
+				for (var i = data.items.length - 1; i >= 0; i--) {
+					bs.rooms[rm_index].people[person_index].addItem( data.items[i] )
+				};
+			}
+
+			socket.emit( 'updateItemList', {
+				items: bs.rooms[rm_index].people[person_index].items,
+				subTotal: Math.round( bs.rooms[rm_index].people[person_index].subtotal )
+			});
+
+			socket.emit('groupTotal', Math.round( bs.rooms[rm_index].group_total ))
+			socket.broadcast.to ( bs.rooms[rm_index].name ).emit( 'groupTotal', Math.round( bs.rooms[rm_index].group_total ) );
 
 		});
 	});
