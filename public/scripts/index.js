@@ -14,7 +14,7 @@ function addUser() {
   
    if ( username != "" ){
       // socket.emit('joinRoom', { name: username, room: room })
-      window.location.replace("http://localhost:3000/app?room=" + room + '?name=' + username);
+      window.location.replace(window.location.host + room + '?name=' + username);
    }
 }
 
