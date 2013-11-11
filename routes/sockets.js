@@ -9,6 +9,7 @@ exports.initialize = function (server) {
 
 	io.sockets.on('connection', function ( socket ) {
 
+
 		//room setup
 		socket.on('joinRoom', function ( data ) {
             socket.join( data.room );

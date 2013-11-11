@@ -136,14 +136,13 @@ exports.App = function() {
         }
       }
       return false;
-
     },
     refreshRoomList : function(){
       this.room_list = [];
       for (var i = this.rooms.length - 1; i >= 0; i--) {
         this.room_list.push ( this.rooms[i].name );
       }
-    },
+    }
   };
   return public
 };
