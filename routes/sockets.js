@@ -14,7 +14,6 @@ exports.initialize = function (server) {
 		socket.on('joinRoom', function ( data ) {
             socket.join( data.room );
    
-
             bs.addRoom( data.room )
             var rm_index = bs.getRoom( data.room )
 
@@ -57,7 +56,7 @@ exports.initialize = function (server) {
 
 
 			socket.broadcast.to( bs.rooms[rm_index].name ).emit( 'updateChat', { message: 
-				data.name + " had " + last_item.quantity + " " + last_item.description + " each costing $" + last_item.price });
+				data.name + " had " + last_item.quantity + " " + last_item.description + " @ $" + last_item.price });
 
 
 			socket.emit('groupTotal', Math.round( bs.rooms[rm_index].group_total ))
