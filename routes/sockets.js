@@ -51,6 +51,15 @@ exports.initialize = function (server) {
 				subTotal: Math.round( bs.rooms[rm_index].people[person_index].subtotal )
 			});
 
+			var last_item = data.items[data.items.length - 1];
+			socket.emit( 'updateChat', { message: 
+				data.name + " had " + last_item.quantity + " " + last_item.description + " each costing $" + last_item.price });
+
+
+			socket.broadcast.to( bs.rooms[rm_index].name ).emit( 'updateChat', { message: 
+				data.name + " had " + last_item.quantity + " " + last_item.description + " each costing $" + last_item.price });
+
+
 			socket.emit('groupTotal', Math.round( bs.rooms[rm_index].group_total ))
 			socket.broadcast.to ( bs.rooms[rm_index].name ).emit( 'groupTotal', Math.round( bs.rooms[rm_index].group_total ) );
 
