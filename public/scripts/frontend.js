@@ -49,7 +49,63 @@ function collectData() {
      
       //returns user data 
       socket.emit('addInfo', {name: username, room: room, items: items})
+      updateChart(items);
    }
+}
+
+function updateChart(items) {
+
+    var chart_array = [];
+
+    var label = "tip";
+    var value = 18;
+    var data = {
+        label: label,
+        data: value
+    };
+ 
+    // Add an item
+
+    var items_cost = 0;
+    for (var i = 0; i < items.length; i++) {
+        items_cost += items[i].quantity * items[i].price;
+    }
+
+    var tax = items_cost * 0.08875
+    var tip = items_cost * 0.18
+
+    var label = "Item Cost";
+    var value = items_cost;
+    var data1 = {
+        label: label,
+        data: value
+    };
+
+    var label = "tax";
+    var value = tax;
+    var data2 = {
+        label: label,
+        data: value
+    };
+
+    var label = "tip";
+    var value = tip;
+    var data3 = {
+        label: label,
+        data: value
+    };
+
+    chart_array.push(data1, data2, data3); 
+
+    $.plot('#placeholder', chart_array, {
+    series: {
+        pie: {
+            innerRadius: 0.5,
+            show: true
+        }
+    }
+});
+
 }
 
 socket.on('peopleInRoom', function(people) {
@@ -80,6 +136,8 @@ socket.on('updateChat', function(server_data) {
    $('#messageList').append("<li>" + server_data.message + "</li>")
 
 })
+
+
 
 
 

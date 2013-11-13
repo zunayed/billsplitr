@@ -1,25 +1,37 @@
+var socket = io.connect();
 var username = '';
 var room = '';
 
-$(function() {
+socket.emit('getRoom');
 
-   $('#joinRoom').click(function () {addUser()}); 
+socket.on('getRoom', function(rooms) {
 
+	for (var i = rooms.length - 1; i >= 0; i--) {
+		$('#roomList').append('<option value="' + rooms[i] + '">' + rooms[i] + '</option>');
+	}
 });
 
-function addUser() {
 
-   username = $('#userName').val()
-   room = $('#roomName').val()
-  
-   if ( username != "" ){
-      // socket.emit('joinRoom', { name: username, room: room })
-      window.location.replace(window.location.search + 'app?room=' + room + '?name=' + username);
-   }
-}
+$(function() {
+	$('#joinRoom').click(function () { 
 
-// socket.on('updateChat', function(server_data) {
+		username = $('#userName').val()
+		room = $('#roomName').val()
+		console.log(username)
+		console.log(room)
+		if ( $('#roomList').val() == 'ClickityClack' & username !== ''){ 
+			addUser(username, room); 
+		}
+		else if ( $('#roomList').val() !== 'ClickityClack' ){
+			addUser( username, $('#roomList').val() );
+		}
+	});
+}); 
 
-//    $('#messageList').append('<br></br>' + server_data.message)
 
-// })
+function addUser(username, room){ 
+
+	window.location.replace(window.location.search + 'app?room=' + room + '?name=' + username)
+	
+};
+
