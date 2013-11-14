@@ -59,7 +59,7 @@ exports.initialize = function (server) {
 
 
 			socket.broadcast.to( bs.rooms[rm_index].name ).emit( 'updateChat', { message: 
-				data.name + 'had ' + last_item.quantity + ' ' + last_item.description + ' @ $' + last_item.price });
+				data.name + ' had ' + last_item.quantity + ' ' + last_item.description + ' @ $' + last_item.price });
 
 
 			socket.emit('groupTotal', Math.round( bs.rooms[rm_index].group_total ));

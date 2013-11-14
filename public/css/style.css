@@ -58,7 +58,7 @@ h3 {
 
 
 .nameForm {
-  width: 300px;
+  width: 285px;
   background-color: #fafafa;
   -webkit-border-radius: 3px;
      -moz-border-radius: 3px;
@@ -80,6 +80,6 @@ h3 {
     color: #fff;
     height: 28px;
     padding-left:10px;
-    width: 300px;
+    width: 285px;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
