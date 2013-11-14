@@ -61,6 +61,7 @@ $(function() {
 
    addUser();
    $("#addItem").click( function() { collectData() } );
+   $("#placeholder2").hide();
 
 });
 
@@ -87,7 +88,9 @@ function collectData() {
      
       //returns user data 
       socket.emit('addInfo', {name: username, room: room, items: items})
+      $("#placeholder2").show();
       updateChart(items);
+
    }
 }
 
