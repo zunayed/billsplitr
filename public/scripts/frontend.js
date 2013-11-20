@@ -2,7 +2,7 @@ var socket = io.connect();
 var items = [];
 var groupTotal = 0;
 var subTotal = 0;
-
+var personTotal =0;
 
 socket.on('peopleInRoom', function(people) {
    $("#userList").html('');
@@ -17,20 +17,21 @@ socket.on('groupTotal', function(data) {
    $("#groupTotal").append("<h3>Group Total $" + data + "</h3>");
    groupTotal = data;
 
-   updateGlobalChart()
+   updateGlobalChart();
 });
 
 socket.on('updateItemList', function(data) {
    $("#subTotal").html("<h3>You Owe: $ " + data.subTotal + "</h3>");
    subTotal = data.subTotal;
    items = data.items;
+
    $("#itemList").html('');
    for (var i = items.length - 1; i >= 0; i--) {
       var msg =  items[i].quantity + " " + items[i].description + " each costing " + items[i].price;
       $("#itemList").append("<li class='list-group-item' data-price='" + items[i].price + "' data-quantity='" + items[i].quantity + "' data-description='" + items[i].description + "'>" + msg + "</li>");
-   };
+   }
 
-   updateGlobalChart()
+   updateGlobalChart();
 });
 
 socket.on('updateChat', function(server_data) {
@@ -66,7 +67,7 @@ $(function() {
 });
 
 function addUser() {
-   if ( username != "" ) {
+   if ( username !== "" ) {
       socket.emit('joinRoom', { name: username, room: room })
    }
 }
@@ -78,7 +79,7 @@ function collectData() {
 
    if (description != "") {
       var msg =  quantity + " " + description + " each costing " + price;
-      $("#itemList").append("<li class='list-group-item' data-price='" + price + "' data-quantity='" + quantity + "' data-description='" + description + "'>" + msg + "</li>");
+      // $("#itemList").append("<li class='list-group-item' data-price='" + price + "' data-quantity='" + quantity + "' data-description='" + description + "'>" + msg + remove + "</li>");
 
       items.push({
          quantity: quantity,
@@ -96,82 +97,83 @@ function collectData() {
 
 function updateChart(items) {
 
-    var chart_array = [];
- 
-    // Add an item
+   var chart_array = [];
 
-    var items_cost = 0;
-    for (var i = 0; i < items.length; i++) {
-        items_cost += items[i].quantity * items[i].price;
-    }
+   // Add an item
 
-    var tax = items_cost * 0.08875
-    var tip = items_cost * 0.18
+   var items_cost = 0;
+   for (var i = 0; i < items.length; i++) {
+     items_cost += items[i].quantity * items[i].price;
+   }
 
-    var label = "Item Cost";
-    var value = items_cost;
-    var data1 = {
-        label: label,
-        data: value,
-        color: '#33CCCC'
-    };
+   var tax = items_cost * 0.08875;
+   var tip = items_cost * 0.18;
+   var label = "Item Cost $" + Math.round( items_cost );
+   var value = items_cost;
+   var data1 = {
+     label: label,
+     data: value,
+     color: '#33CCCC'
+   };
 
-    var label = "tax";
-    var value = tax;
-    var data2 = {
-        label: label,
-        data: value,
-        color: "#FF5050"
-    };
+   label = "tax $" + Math.round( tax );
+   value = tax;
+   var data2 = {
+     label: label,
+     data: value,
+     color: "#FF5050"
+   };
 
-    var label = "tip";
-    var value = tip;
-    var data3 = {
-        label: label,
-        data: value
-    };
+   label = "tip $" + Math.round( tip );
+   value = tip;
+   var data3 = {
+     label: label,
+     data: value
+   };
 
-    chart_array.push(data1, data2, data3); 
-
-    $.plot('#placeholder', chart_array, {
-        series: {
-            pie: {
-                innerRadius: 0.5,
-                show: true
-            }
-        }
-    });
+   chart_array.push(data1, data2, data3); 
+   $.plot('#placeholder', chart_array, {
+     series: {
+         pie: {
+             innerRadius: 0.5,
+             show: true
+         }
+     }
+   });
 }
 
 function updateGlobalChart() {
 
-    var chart_array = [];
+    if (subTotal != groupTotal){
 
-    var label = "Group";
-    var value = groupTotal;
-    var data1 = {
-        label: label,
-        data: value,
-        color: "#545454"
-    };
+        var chart_array = [];
 
-    var label = "Individual";
-    var value = subTotal;
-    var data2 = {
-        label: label,
-        data: value
-    };
+        var label = "Group $" + groupTotal;
+        var value = groupTotal;
+        var data1 = {
+            label: label,
+            data: value,
+            color: "#545454"
+        };
 
-    chart_array.push(data1, data2); 
+        var label = "Individual $" + subTotal ;
+        var value = subTotal;
+        var data2 = {
+            label: label,
+            data: value
+        };
 
-    $.plot('#placeholder2', chart_array, {
-        series: {
-            pie: {
-                innerRadius: 0.5,
-                show: true
+        chart_array.push(data1, data2); 
+
+        $.plot('#placeholder2', chart_array, {
+            series: {
+                pie: {
+                    innerRadius: 0.5,
+                    show: true
+                }
             }
-        }
-    });
+        });
+    }
 }
 
 

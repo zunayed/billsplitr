@@ -56,6 +56,11 @@ h3 {
   color: #F7464A;
 }
 
+#userList, #messageList
+{
+    list-style-type: none;
+}
+
 
 .nameForm {
   width: 285px;

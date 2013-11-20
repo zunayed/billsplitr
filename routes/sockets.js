@@ -55,7 +55,7 @@ exports.initialize = function (server) {
 
 			var last_item = data.items[data.items.length - 1];
 			socket.emit( 'updateChat', { message: data.name +  ' had '  + 
-				last_item.quantity + ' ' + last_item.description + ' each costing $' + last_item.price });
+				last_item.quantity + ' ' + last_item.description + ' @ $' + last_item.price });
 
 
 			socket.broadcast.to( bs.rooms[rm_index].name ).emit( 'updateChat', { message: 
