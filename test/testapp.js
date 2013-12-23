@@ -14,16 +14,16 @@ describe('Billsplitr tests', function(){
 
     it('should create a new room and assign an app to it', function() {
       assert.equal(0, this.app.rooms.length);
-      this.app.addRoom('test_room')
+      this.app.addRoom('test_room');
       assert.equal(1, this.app.rooms.length);
-      this.app.addRoom('test_room2')
+      this.app.addRoom('test_room2');
       assert.equal('test_room2', this.app.rooms[1].name);
     });
 
     it('should check duplicate room is not added', function() {
-      this.app.addRoom('test_room')
+      this.app.addRoom('test_room');
       assert.equal(1, this.app.rooms.length);
-      this.app.addRoom('test_room')
+      this.app.addRoom('test_room');
       assert.equal(1, this.app.rooms.length);
     });
 
@@ -81,9 +81,9 @@ describe('Billsplitr tests', function(){
     //'quantity':3,'price':5,'description':'beer'
     it('add an item to a person and see if params match', function(){
       var person = this.person;
-      var beer = {'quantity':3,'price':5,'description':'beer'}
+      var beer = {'quantity':3,'price':5,'description':'beer'};
       assert.equal(0, this.person.items.length);
-      person.addItem(beer)
+      person.addItem(beer);
       assert.equal(1, this.person.items.length);
       assert.equal(3, this.person.items[0].quantity);
       assert.equal(5, this.person.items[0].price);
@@ -93,8 +93,8 @@ describe('Billsplitr tests', function(){
 
     it('duplicate item is rejected from persons item list', function(){
       var person = this.person;
-      var beer = {'quantity':3,'price':5,'description':'beer'}
-      var beer2 = {'quantity':2,'price':6,'description':'beer'}
+      var beer = {'quantity':3,'price':5,'description':'beer'};
+      var beer2 = {'quantity':2,'price':6,'description':'beer'};
 
       person.addItem(beer);
       assert.equal(1, this.person.items.length);
@@ -154,19 +154,19 @@ describe('Billsplitr tests', function(){
       assert.equal('test_room1', this.app.rooms[0].name);
       assert.equal('test_room2', this.app.rooms[1].name);
 
-      app.rooms[0].addPerson('shak')
-      app.rooms[1].addPerson('mark')
+      app.rooms[0].addPerson('shak');
+      app.rooms[1].addPerson('mark');
 
       var shak = app.rooms[0].people[0];
       var mark = app.rooms[1].people[0];
 
-      shak.addItem( beer )
-      mark.addItem( burger )
+      shak.addItem(beer);
+      mark.addItem(burger);
 
-      assert.equal( 57.09375, app.rooms[0].group_total)
-      assert.equal( 30.45, app.rooms[1].group_total)
+      assert.equal( 57.09375, app.rooms[0].group_total);
+      assert.equal( 30.45, app.rooms[1].group_total);
 
-    } );
+    });
 
     it( 'should find a user', function() {
       var room = this.room;

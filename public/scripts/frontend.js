@@ -43,15 +43,13 @@ socket.on('updateChat', function(server_data) {
 var urlData = function () {
    // function is anonymous, is executed immediately and returns value 
    var query_string = {};
-   var query = window.location.search
+   var query = window.location.search;
    query = query.split("?");
  
    for (var i = 0; i < query.length; i++) {
-
       var pair = query[i].split("=");
       query_string[pair[0]] = pair[1];
-       
-   }  
+    }  
    return query_string;
 } ();
 
@@ -91,6 +89,7 @@ function collectData() {
       socket.emit('addInfo', {name: username, room: room, items: items})
       $("#placeholder2").show();
       updateChart(items);
+      
 
    }
 }
@@ -144,37 +143,34 @@ function updateChart(items) {
 
 function updateGlobalChart() {
 
-    if (subTotal != groupTotal){
+  if (subTotal != groupTotal){
 
-        var chart_array = [];
+      var chart_array = [];
 
-        var label = "Group $" + groupTotal;
-        var value = groupTotal;
-        var data1 = {
-            label: label,
-            data: value,
-            color: "#545454"
-        };
+      var label = "Group $" + groupTotal;
+      var value = groupTotal;
+      var data1 = {
+          label: label,
+          data: value,
+          color: "#545454"
+      };
 
-        var label = "Individual $" + subTotal ;
-        var value = subTotal;
-        var data2 = {
-            label: label,
-            data: value
-        };
+      var label = "Individual $" + subTotal ;
+      var value = subTotal;
+      var data2 = {
+          label: label,
+          data: value
+      };
 
-        chart_array.push(data1, data2); 
+      chart_array.push(data1, data2); 
 
-        $.plot('#placeholder2', chart_array, {
-            series: {
-                pie: {
-                    innerRadius: 0.5,
-                    show: true
-                }
-            }
-        });
-    }
+      $.plot('#placeholder2', chart_array, {
+          series: {
+              pie: {
+                  innerRadius: 0.5,
+                  show: true
+              }
+          }
+      });
+  }
 }
-
-
-

@@ -6,7 +6,6 @@ exports.Item = function( item_data ) {
     price : item_data.price,
     quantity : item_data.quantity
   };
-
   return public;
 };
 
@@ -85,9 +84,9 @@ exports.Room = function( name ) {
       return false;
     },
     removePerson : function( name ){
-      if( this.hasPerson( name ) ) {  
+      if( this.hasPerson( name ) ) {
         this.people.splice( this.getPerson( name ), 1 );
-        this.refreshPeopleList()
+        this.refreshPeopleList();
       }
      
     },
@@ -117,8 +116,8 @@ exports.App = function() {
     addRoom : function( name ){
       if( !this.hasRoom ( name )){
         var room = new Room( name );
-        this.rooms.push( room ); 
-        this.refreshRoomList(); 
+        this.rooms.push( room );
+        this.refreshRoomList();
       }
     },
     hasRoom : function ( name ){
@@ -144,5 +143,5 @@ exports.App = function() {
       }
     }
   };
-  return public
+  return public;
 };
